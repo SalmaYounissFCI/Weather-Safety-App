@@ -27,13 +27,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         "animation": "assets/animations/cloud.json",
       },
       {
-        "title": "Daily Forecasts",
-        "subtitle": "Plan your day with up-to-date weather predictions.",
-        "animation": "assets/animations/Location.json",
+        "title": "Location-Based Alerts",
+        "subtitle":
+            "Receive weather warmings\nspecific to your area and stay prepared.",
+        "animation": "assets/animations/Location Pin.json",
       },
       {
-        "title": "Severe Alerts",
-        "subtitle": "Stay safe with real-time severe weather alerts.",
+        "title": "Smart Notifications",
+        "subtitle":
+            "Personalized alerts based on your activitis and preferences.",
         "animation": "assets/animations/Notification.json",
       },
     ];
@@ -48,7 +50,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [AppColorsDark.gradientStart, AppColorsDark.gradientEnd],
+            colors: [
+              Color.fromARGB(255, 66, 84, 134),
+              Color.fromARGB(255, 31, 44, 80),
+              AppColorsDark.gradientEnd,
+            ],
+            stops: [0, 0.4, 1],
           ),
         ),
         child: SafeArea(
@@ -124,7 +131,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               page["title"]!,
                               style: const TextStyle(
                                 color: AppColorsDark.textSecondary,
-                                fontSize: 24,
+                                fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,
@@ -134,7 +141,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               page["subtitle"]!,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
-                                fontSize: 16,
+                                fontSize: 18,
                                 color: AppColorsDark.textSecondary,
                                 height: 1.4,
                               ),
@@ -172,29 +179,46 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColorsDark.accentBlue,
-                    minimumSize: const Size(double.infinity, 55),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color.fromARGB(
+                          255,
+                          86,
+                          126,
+                          197,
+                        ).withOpacity(0.7), // لون اللمعة
+                        blurRadius: 2, // كل ما زاد زادت الهالة
+                        spreadRadius: 5, // مدى انتشار الضوء
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    if (isLastPage) {
-                      // Navigator.pushReplacementNamed(context, "/login");
-                    } else {
-                      _controller.nextPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeInOut,
-                      );
-                    }
-                  },
-                  child: Text(
-                    isLastPage ? "Get Started" : "Next",
-                    style: AppTypography.button.copyWith(
-                      color: AppColorsDark.textPrimary,
-                      fontSize: 16,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 66, 84, 134),
+                      minimumSize: const Size(double.infinity, 55),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (isLastPage) {
+                        // Navigator.pushReplacementNamed(context, "/login");
+                      } else {
+                        _controller.nextPage(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    child: Text(
+                      isLastPage ? "Get Started" : "Next",
+                      style: AppTypography.button.copyWith(
+                        color: AppColorsDark.textPrimary,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),

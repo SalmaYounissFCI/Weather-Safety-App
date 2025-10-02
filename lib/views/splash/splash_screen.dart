@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 end: Alignment.bottomCenter,
                 colors: [
                   AppColorsDark.gradientEnd,
-                  AppColorsDark.gradientStart,
+                  Color.fromARGB(255, 52, 67, 107),
                 ],
               ),
             ),
@@ -95,7 +95,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // ✨ النصوص بــ Fade in
                 AnimatedOpacity(
                   duration: const Duration(seconds: 2),
                   opacity: _opacity,
