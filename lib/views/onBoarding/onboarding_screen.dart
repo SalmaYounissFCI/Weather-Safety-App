@@ -14,7 +14,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final PageController _controller = PageController();
   bool isLastPage = false;
   int currentPage = 0;
-  @override
   late final List<Map<String, String>> pages;
   @override
   void didChangeDependencies() {
@@ -189,9 +188,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           86,
                           126,
                           197,
-                        ).withOpacity(0.7), // لون اللمعة
-                        blurRadius: 2, // كل ما زاد زادت الهالة
-                        spreadRadius: 5, // مدى انتشار الضوء
+                        ).withAlpha(200),
+                        blurRadius: 2,
+                        spreadRadius: 5,
                       ),
                     ],
                   ),
