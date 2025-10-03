@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import '../theme/app_colors.dart';
 
 class GlassmorphismCard extends StatelessWidget {
   final Widget child;
-  final double width;
+  final double? width;
+  final double? height;
   final double blur;
-  final double opacity;
   final BorderRadius borderRadius;
+  final Color? borderColor;
+  final bool isPadded;
 
   const GlassmorphismCard({
     super.key,
     required this.child,
-    required this.width,
+    this.width,
+    this.height,
     this.blur = 10.0,
-    this.opacity = 0.2,
-    this.borderRadius = const BorderRadius.all(Radius.circular(25.0)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(20.0)),
+    this.borderColor,
+    this.isPadded = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final surfaceColor = Theme.of(context).colorScheme.surface;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final glassColor = isDarkMode
+        ? AppColorsDark.glassBg
+        : AppColorsLight.glassBg;
+    final defaultBorderColor = isDarkMode
+        ? AppColorsDark.glassBorder
+        : AppColorsLight.glassBorder;
 
     return ClipRRect(
       borderRadius: borderRadius,
@@ -27,16 +38,17 @@ class GlassmorphismCard extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
         child: Container(
           width: width,
-          padding: const EdgeInsets.all(16.0),
+          height: height,
+          padding: isPadded ? const EdgeInsets.all(16.0) : EdgeInsets.zero,
           decoration: BoxDecoration(
-            color: surfaceColor.withAlpha((255 * opacity).round()),
+            color: glassColor,
             borderRadius: borderRadius,
             border: Border.all(
-              color: surfaceColor.withAlpha((255 * (opacity + 0.1)).round()),
+              color: borderColor ?? defaultBorderColor,
               width: 1.5,
             ),
           ),
-          child: child, // The content is placed here!
+          child: child,
         ),
       ),
     );
