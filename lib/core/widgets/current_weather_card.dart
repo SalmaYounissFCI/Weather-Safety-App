@@ -14,9 +14,9 @@ class CurrentWeatherCard extends StatelessWidget {
       child: Column(
         children: [
           _buildLocationHeader(textTheme, colorScheme),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           _buildCurrentWeather(textTheme, colorScheme),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           _buildWeatherDetails(textTheme, colorScheme),
         ],
       ),

@@ -20,7 +20,7 @@ class ForecastCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: GlassmorphismCard(
-        width: 80,
+        width: 90,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

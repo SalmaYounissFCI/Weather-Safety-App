@@ -22,7 +22,7 @@ class ForecastSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 120,
+          height: 135,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: const [
@@ -37,6 +37,11 @@ class ForecastSection extends StatelessWidget {
                 day: "Thu",
                 icon: Icons.thunderstorm_outlined,
                 temp: "18°",
+              ),
+              ForecastCard(
+                day: "Fri",
+                icon: Icons.wb_sunny_outlined,
+                temp: "25°",
               ),
             ],
           ),
