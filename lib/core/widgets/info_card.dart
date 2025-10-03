@@ -6,6 +6,8 @@ class InfoCard extends StatelessWidget {
   final String title;
   final String message;
   final Color color;
+  final VoidCallback? onTap; // <-- جديد عشان نعمل action
+  final bool showArrow; // <-- جديد عشان نظهر سهم يمين
 
   const InfoCard({
     super.key,
@@ -13,6 +15,8 @@ class InfoCard extends StatelessWidget {
     required this.title,
     required this.message,
     required this.color,
+    this.onTap,
+    this.showArrow = true, // الافتراضي يظهر السهم
   });
 
   @override
@@ -21,6 +25,7 @@ class InfoCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(20.0)),
         boxShadow: [
@@ -31,34 +36,47 @@ class InfoCard extends StatelessWidget {
           ),
         ],
       ),
-      child: GlassmorphismCard(
-        width: double.infinity,
-        borderColor: color.withAlpha(150),
-        child: Row(
-          children: [
-            Icon(icon, color: color, size: 28),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                    ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: GlassmorphismCard(
+          width: double.infinity,
+          borderColor: color.withAlpha(150),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              children: [
+                Icon(icon, color: color, size: 28),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                      Text(
+                        message,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface.withAlpha(204),
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    message,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurface.withAlpha(204),
-                    ),
+                ),
+                if (showArrow)
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: colorScheme.onSurface.withAlpha(180),
                   ),
-                ],
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

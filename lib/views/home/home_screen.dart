@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp/profile_screen.dart';
 import 'package:weatherapp/views/home/home_content.dart';
 import '../../core/theme/app_colors.dart';
 import '../../alerts_screen.dart';
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeContent(), // محتوى الهوم زي ما هو
     AlertsScreen(),
     Center(child: Text("Map Screen", style: TextStyle(fontSize: 20))),
-    Center(child: Text("Profile Screen", style: TextStyle(fontSize: 20))),
+    ProfileScreen(),
   ];
 
   void _onTabSelected(int index) {
