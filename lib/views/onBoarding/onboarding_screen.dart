@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weatherapp/core/theme/app_colors.dart';
 import 'package:weatherapp/core/theme/app_text_styles.dart';
+import 'package:weatherapp/views/home/home_screen.dart';
+import 'package:weatherapp/views/login/login_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -84,12 +86,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       )
                     else
                       const SizedBox(width: 50),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigator.pushReplacementNamed(context, "/login");
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        );
                       },
                       child: const Text(
-                        "skip",
+                        "Skip",
                         style: TextStyle(
                           fontSize: 16,
                           color: AppColorsDark.primary,
@@ -202,9 +209,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
+
                     onPressed: () {
                       if (isLastPage) {
-                        // Navigator.pushReplacementNamed(context, "/login");
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        );
                       } else {
                         _controller.nextPage(
                           duration: const Duration(milliseconds: 400),

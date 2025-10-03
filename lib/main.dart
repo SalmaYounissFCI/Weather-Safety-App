@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weatherapp/views/home_screen.dart';
 import 'package:weatherapp/views/splash/splash_screen.dart';
 import 'core/theme/app_theme.dart';
 
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Weather App',
       theme: isDayTime ? AppTheme.lightTheme : AppTheme.darkTheme,
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

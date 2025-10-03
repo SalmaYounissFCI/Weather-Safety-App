@@ -62,6 +62,7 @@ flutter:
     - assets/animations/cloud.json
     - assets/animations/Location Pin.json
     - assets/animations/Notification.json
+    - assets/images/google.png
 
   #   - images/a_dot_ham.jpeg
 

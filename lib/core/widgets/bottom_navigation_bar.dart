@@ -1,8 +1,16 @@
-import 'package:flutter/material.dart';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+  final int currentIndex;
+  final Function(int) onTabSelected;
+
+  const BottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTabSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +38,15 @@ class BottomNavBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(Icons.home, "Home", true, colorScheme),
+              _buildNavItem(Icons.home, "Home", 0, colorScheme),
               _buildNavItem(
                 Icons.notifications_outlined,
                 "Alerts",
-                false,
+                1,
                 colorScheme,
               ),
-              _buildNavItem(Icons.map_outlined, "Map", false, colorScheme),
-              _buildNavItem(
-                Icons.person_outline,
-                "Profile",
-                false,
-                colorScheme,
-              ),
+              _buildNavItem(Icons.map_outlined, "Map", 2, colorScheme),
+              _buildNavItem(Icons.person_outline, "Profile", 3, colorScheme),
             ],
           ),
         ),
@@ -54,36 +57,38 @@ class BottomNavBar extends StatelessWidget {
   Widget _buildNavItem(
     IconData icon,
     String label,
-    bool isActive,
+    int index,
     ColorScheme colorScheme,
   ) {
-    // Active item style
     const activeColor = Colors.white;
     const activeBackgroundColor = Color(0xFF38B6FF);
 
-    // Inactive item style
+    final isActive = currentIndex == index;
     final inactiveColor = colorScheme.onSurface.withAlpha(204);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: isActive ? activeBackgroundColor : Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: isActive ? activeColor : inactiveColor),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isActive ? activeColor : inactiveColor,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+    return GestureDetector(
+      onTap: () => onTabSelected(index),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isActive ? activeBackgroundColor : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: isActive ? activeColor : inactiveColor),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isActive ? activeColor : inactiveColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
