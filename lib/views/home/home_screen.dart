@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:weatherapp/profilePage/profile_screen.dart';
 import 'package:weatherapp/views/home/home_content.dart';
@@ -18,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = const [
-    HomeContent(), // محتوى الهوم زي ما هو
+    HomeContent(),
     AlertsScreen(),
     Center(child: Text("Map Screen", style: TextStyle(fontSize: 20))),
     ProfileScreen(),
@@ -52,24 +51,15 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            // الشاشة الأساسية
             IndexedStack(index: _selectedIndex, children: _screens),
 
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 16,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: Container(
-                    color: Colors.white.withOpacity(0.3), // شفاف
-                    child: BottomNavBar(
-                      currentIndex: _selectedIndex,
-                      onTabSelected: _onTabSelected,
-                    ),
-                  ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                child: BottomNavBar(
+                  currentIndex: _selectedIndex,
+                  onTabSelected: _onTabSelected,
                 ),
               ),
             ),
