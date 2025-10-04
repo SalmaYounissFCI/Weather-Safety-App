@@ -37,91 +37,102 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
+    final isDarkMode = theme.brightness == Brightness.dark;
+    final gradientStartColor = isDarkMode
+        ? AppColorsDark.gradientStart
+        : AppColorsLight.gradientStart;
+    final gradientEndColor = isDarkMode
+        ? AppColorsDark.gradientEnd
+        : AppColorsLight.gradientEnd;
     return Scaffold(
       backgroundColor: AppColorsDark.background,
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  AppColorsDark.gradientEnd,
-                  Color.fromARGB(255, 52, 67, 107),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [gradientStartColor, gradientEndColor],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Stack(
+          children: [
+            //
+            AnimatedPositioned(
+              duration: const Duration(seconds: 3),
+              top: _moveIcons ? 60 : 80,
+              left: 40,
+              child: const Icon(
+                Icons.cloud,
+                color: AppColorsDark.textMuted,
+                size: 40,
+              ),
+            ),
+            AnimatedPositioned(
+              duration: const Duration(seconds: 3),
+              top: _moveIcons ? 200 : 220,
+              right: 40,
+              child: const Icon(
+                Icons.cloud_queue,
+                color: AppColorsDark.textMuted,
+                size: 35,
+              ),
+            ),
+            AnimatedPositioned(
+              duration: const Duration(seconds: 3),
+              bottom: _moveIcons ? 50 : 70,
+              right: 100,
+              child: const Icon(
+                Icons.wb_sunny,
+                color: AppColorsDark.accentBlue,
+                size: 45,
+              ),
+            ),
+
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    "assets/animations/cloud.json",
+                    height: 150,
+                    width: 150,
+                  ),
+                  const SizedBox(height: 20),
+
+                  AnimatedOpacity(
+                    duration: const Duration(seconds: 2),
+                    opacity: _opacity,
+                    child: Column(
+                      children: [
+                        Text(
+                          "WeatherSafe",
+                          style: AppTypography.h1.copyWith(
+                            color: textTheme.bodyLarge?.color,
+                          ),
+                        ),
+
+                        SizedBox(height: 10),
+                        Text(
+                          "Your Personal Weather Guardian",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: textTheme.bodyMedium?.color?.withOpacity(
+                              0.8,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
-          AnimatedPositioned(
-            duration: const Duration(seconds: 3),
-            top: _moveIcons ? 60 : 80,
-            left: 40,
-            child: const Icon(
-              Icons.cloud,
-              color: AppColorsDark.textMuted,
-              size: 40,
-            ),
-          ),
-          AnimatedPositioned(
-            duration: const Duration(seconds: 3),
-            top: _moveIcons ? 200 : 220,
-            right: 40,
-            child: const Icon(
-              Icons.cloud_queue,
-              color: AppColorsDark.textMuted,
-              size: 35,
-            ),
-          ),
-          AnimatedPositioned(
-            duration: const Duration(seconds: 3),
-            bottom: _moveIcons ? 50 : 70,
-            right: 100,
-            child: const Icon(
-              Icons.wb_sunny,
-              color: AppColorsDark.accentBlue,
-              size: 45,
-            ),
-          ),
-
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Lottie.asset(
-                  "assets/animations/cloud.json",
-                  height: 150,
-                  width: 150,
-                ),
-                const SizedBox(height: 20),
-
-                AnimatedOpacity(
-                  duration: const Duration(seconds: 2),
-                  opacity: _opacity,
-                  child: Column(
-                    children: [
-                      Text(
-                        "WeatherSafe",
-                        style: AppTypography.h1.copyWith(
-                          color: AppColorsDark.textPrimary,
-                        ),
-                      ),
-
-                      SizedBox(height: 10),
-                      Text(
-                        "Your Personal Weather Guardian",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: AppColorsDark.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

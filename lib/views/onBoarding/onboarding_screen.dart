@@ -44,21 +44,28 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
+    final isDarkMode = theme.brightness == Brightness.dark;
+    final gradientStartColor = isDarkMode
+        ? AppColorsDark.gradientStart
+        : AppColorsLight.gradientStart;
+    final gradientEndColor = isDarkMode
+        ? AppColorsDark.gradientEnd
+        : AppColorsLight.gradientEnd;
     return Scaffold(
       backgroundColor: AppColorsDark.background,
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromARGB(255, 66, 84, 134),
-              Color.fromARGB(255, 31, 44, 80),
-              AppColorsDark.gradientEnd,
-            ],
-            stops: [0, 0.4, 1],
+            colors: [gradientStartColor, gradientEndColor],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
+
         child: SafeArea(
           child: Column(
             children: [
@@ -75,12 +82,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             curve: Curves.easeInOut,
                           );
                         },
-                        child: const Text(
+                        child: Text(
                           "Back",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white54,
-                            fontWeight: FontWeight.w600,
+                          style: textTheme.titleSmall?.copyWith(
+                            color: const Color.fromARGB(255, 115, 115, 115),
                           ),
                         ),
                       )
@@ -95,12 +100,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         "Skip",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: AppColorsDark.primary,
-                          fontWeight: FontWeight.w600,
+                        style: textTheme.titleSmall?.copyWith(
+                          color: colors.onSurface,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -135,8 +139,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             const SizedBox(height: 40),
                             Text(
                               page["title"]!,
-                              style: const TextStyle(
-                                color: AppColorsDark.textSecondary,
+                              style: TextStyle(
+                                color: textTheme.headlineMedium?.color
+                                    ?.withOpacity(0.9),
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -146,9 +151,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             Text(
                               page["subtitle"]!,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 18,
-                                color: AppColorsDark.textSecondary,
+                                color: textTheme.bodyMedium?.color?.withOpacity(
+                                  0.8,
+                                ),
                                 height: 1.4,
                               ),
                             ),
@@ -192,9 +199,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       BoxShadow(
                         color: const Color.fromARGB(
                           255,
-                          86,
-                          126,
-                          197,
+                          81,
+                          119,
+                          152,
                         ).withAlpha(200),
                         blurRadius: 2,
                         spreadRadius: 5,
@@ -203,7 +210,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 66, 84, 134),
+                      backgroundColor: isDarkMode
+                          ? AppColorsDark.buttonColor
+                          : AppColorsLight.buttonColor,
                       minimumSize: const Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),

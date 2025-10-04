@@ -42,6 +42,8 @@ class AppColorsLight {
 
   static const sosBg = Color(0xFFFF4757);
   static const sosHover = Color(0xFFFF3838);
+
+  static const buttonColor = Colors.blueGrey;
 }
 
 /// Dark theme colors
@@ -86,4 +88,6 @@ class AppColorsDark {
 
   static const sosBg = Color(0xFF991B1B);
   static const sosHover = Color(0xFF7F1D1D);
+
+  static const buttonColor = Color.fromARGB(255, 66, 84, 134);
 }

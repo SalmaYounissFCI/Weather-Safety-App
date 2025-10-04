@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp/core/theme/app_colors.dart';
 import 'package:weatherapp/core/widgets/info_card.dart';
+import 'package:weatherapp/profilePage/edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final gradientStartColor = isDarkMode
         ? AppColorsDark.gradientStart
@@ -33,8 +38,13 @@ class ProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.white.withOpacity(0.05),
-                  border: Border.all(color: Colors.white24, width: 1),
+                  color: const Color.fromARGB(
+                    255,
+                    184,
+                    181,
+                    181,
+                  ).withOpacity(0.05),
+                  border: Border.all(color: Colors.blueGrey, width: 1),
                 ),
                 child: Row(
                   children: [
@@ -46,18 +56,21 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(width: 16),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           "John Doe",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: textTheme.headlineMedium?.color,
                           ),
                         ),
                         Text(
                           "john.doe@email.com",
-                          style: TextStyle(color: Colors.white70, fontSize: 14),
+                          style: TextStyle(
+                            color: textTheme.headlineSmall?.color,
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),
@@ -101,7 +114,15 @@ class ProfileScreen extends StatelessWidget {
                 title: "Edit Profile",
                 message: "Update your account details",
                 color: Colors.green.shade300,
-                onTap: () {},
+                onTap: () {
+                  // Navigate to EditProfileScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditProfileScreen(),
+                    ),
+                  );
+                },
               ),
               InfoCard(
                 icon: Icons.notifications,
@@ -121,14 +142,14 @@ class ProfileScreen extends StatelessWidget {
                 icon: Icons.language,
                 title: "Language",
                 message: "English",
-                color: Colors.white70,
+                color: Colors.teal.shade400,
                 onTap: () {},
               ),
               InfoCard(
                 icon: Icons.settings,
                 title: "General Settings",
                 message: "App preferences",
-                color: Colors.white70,
+                color: Colors.blueGrey,
                 onTap: () {},
               ),
 
@@ -147,11 +168,14 @@ class ProfileScreen extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              const Center(
+              Center(
                 child: Text(
                   "Will It Rain On My Parade?\nVersion 1.0.0",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white54, fontSize: 12),
+                  style: TextStyle(
+                    color: textTheme.bodyMedium?.color,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],

@@ -24,14 +24,9 @@ class LoginScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 66, 84, 134),
-            Color.fromARGB(255, 31, 44, 80),
-            AppColorsDark.gradientEnd,
-          ],
+          colors: [gradientStartColor, gradientEndColor],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          stops: [0, 0.4, 1],
         ),
       ),
       child: Scaffold(
@@ -138,8 +133,12 @@ class LoginScreen extends StatelessWidget {
                   CustomButton(
                     label: "Sign in with Google",
                     onPressed: () {},
-                    backgroundColor: Color.fromARGB(255, 66, 84, 134),
-                    textColor: colors.onSurface,
+                    backgroundColor: isDarkMode
+                        ? AppColorsDark.buttonColor
+                        : AppColorsLight.buttonColor,
+                    textColor: isDarkMode
+                        ? AppColorsDark.primary
+                        : AppColorsLight.primaryForeground,
                     borderRadius: 14,
                     height: 50,
                     icon: Image.asset(

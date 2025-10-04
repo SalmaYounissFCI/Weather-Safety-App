@@ -34,6 +34,15 @@ class AppTheme {
       ),
       labelLarge: AppTypography.label.copyWith(color: AppColorsLight.textMuted),
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColorsLight.buttonColor,
+        foregroundColor: Colors.white,
+        textStyle: AppTypography.label,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      ),
+    ),
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -64,6 +73,15 @@ class AppTheme {
         color: AppColorsDark.textSecondary,
       ),
       labelLarge: AppTypography.label.copyWith(color: AppColorsDark.textMuted),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColorsDark.buttonColor,
+        foregroundColor: Colors.white,
+        textStyle: AppTypography.label,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      ),
     ),
   );
 }

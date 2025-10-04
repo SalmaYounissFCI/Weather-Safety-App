@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:weatherapp/profile_screen.dart';
+import 'package:weatherapp/profilePage/profile_screen.dart';
 import 'package:weatherapp/views/home/home_content.dart';
 import '../../core/theme/app_colors.dart';
 import '../../alerts_screen.dart';
@@ -48,13 +50,30 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: IndexedStack(index: _selectedIndex, children: _screens),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: BottomNavBar(
-            currentIndex: _selectedIndex,
-            onTabSelected: _onTabSelected,
-          ),
+        body: Stack(
+          children: [
+            // الشاشة الأساسية
+            IndexedStack(index: _selectedIndex, children: _screens),
+
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(
+                    color: Colors.white.withOpacity(0.3), // شفاف
+                    child: BottomNavBar(
+                      currentIndex: _selectedIndex,
+                      onTabSelected: _onTabSelected,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
