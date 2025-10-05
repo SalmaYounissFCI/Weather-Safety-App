@@ -1,10 +1,10 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:weatherapp/profilePage/profile_screen.dart';
 import 'package:weatherapp/views/home/home_content.dart';
 import '../../core/theme/app_colors.dart';
 import '../../alerts_screen.dart';
 import '../../core/widgets/bottom_navigation_bar.dart';
+import '../Map/map_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = const [
     HomeContent(),
     AlertsScreen(),
-    Center(child: Text("Map Screen", style: TextStyle(fontSize: 20))),
+    MapScreen(),
     ProfileScreen(),
   ];
 

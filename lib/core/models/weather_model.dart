@@ -1,4 +1,3 @@
-// هذا الكلاس يمثل الاستجابة الكاملة للطقس الحالي
 class CurrentWeather {
   final String name;
   final MainInfo main;
@@ -12,7 +11,6 @@ class CurrentWeather {
     required this.wind,
   });
 
-  // هذه الدالة تقوم ببناء object من الـ JSON
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
     return CurrentWeather(
       name: json['name'] ?? 'Unknown',
@@ -23,7 +21,6 @@ class CurrentWeather {
   }
 }
 
-// كلاس مساعد للمعلومات الرئيسية
 class MainInfo {
   final double temp;
   final int humidity;
@@ -38,7 +35,6 @@ class MainInfo {
   }
 }
 
-// كلاس مساعد لوصف الطقس
 class WeatherInfo {
   final String description;
   final String icon;
@@ -53,7 +49,6 @@ class WeatherInfo {
   }
 }
 
-// كلاس مساعد لمعلومات الرياح
 class WindInfo {
   final double speed;
 
@@ -64,9 +59,6 @@ class WindInfo {
   }
 }
 
-// --- Models for Forecast ---
-
-// هذا الكلاس يمثل الاستجابة الكاملة للتوقعات
 class ForecastResponse {
   final List<ForecastItem> list;
 
@@ -81,7 +73,6 @@ class ForecastResponse {
   }
 }
 
-// هذا الكلاس يمثل كل عنصر في قائمة التوقعات
 class ForecastItem {
   final int dt;
   final MainInfo main;

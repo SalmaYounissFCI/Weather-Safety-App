@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp/core/models/info_card_model.dart';
 import 'package:weatherapp/core/theme/app_colors.dart';
 import 'package:weatherapp/core/widgets/info_card.dart';
 import 'package:weatherapp/profilePage/edit_profile_screen.dart';
@@ -90,11 +91,13 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               InfoCard(
-                icon: Icons.emergency,
-                title: "Emergency SOS",
-                message: "Quick access to emergency features",
-                color: Colors.redAccent,
-                onTap: () {},
+                infoCardData: InfoCardModel(
+                  icon: Icons.emergency,
+                  title: "Emergency SOS",
+                  message: "Quick access to emergency features",
+                  color: Colors.redAccent,
+                  onTap: () {},
+                ),
               ),
 
               const SizedBox(height: 24),
@@ -110,60 +113,69 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 10),
 
               InfoCard(
-                icon: Icons.person,
-                title: "Edit Profile",
-                message: "Update your account details",
-                color: Colors.green.shade300,
-                onTap: () {
-                  // Navigate to EditProfileScreen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditProfileScreen(),
-                    ),
-                  );
-                },
+                infoCardData: InfoCardModel(
+                  icon: Icons.person,
+                  title: "Edit Profile",
+                  message: "Update your account details",
+                  color: Colors.green.shade300,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EditProfileScreen(),
+                      ),
+                    );
+                  },
+                ),
               ),
               InfoCard(
-                icon: Icons.notifications,
-                title: "Notifications",
-                message: "Manage alerts and sounds",
-                color: Colors.blue.shade300,
-                onTap: () {},
+                infoCardData: InfoCardModel(
+                  icon: Icons.notifications,
+                  title: "Notifications",
+                  message: "Manage alerts and sounds",
+                  color: Colors.blue.shade300,
+                  onTap: () {},
+                ),
               ),
               InfoCard(
-                icon: Icons.thermostat,
-                title: "Temperature Units",
-                message: "°C",
-                color: Colors.red.shade400,
-                onTap: () {},
+                infoCardData: InfoCardModel(
+                  icon: Icons.thermostat,
+                  title: "Temperature Units",
+                  message: "°C",
+                  color: Colors.red.shade400,
+                  onTap: () {},
+                ),
               ),
               InfoCard(
-                icon: Icons.language,
-                title: "Language",
-                message: "English",
-                color: Colors.teal.shade400,
-                onTap: () {},
+                infoCardData: InfoCardModel(
+                  icon: Icons.language,
+                  title: "Language",
+                  message: "English",
+                  color: Colors.teal.shade400,
+                  onTap: () {},
+                ),
               ),
               InfoCard(
-                icon: Icons.settings,
-                title: "General Settings",
-                message: "App preferences",
-                color: Colors.blueGrey,
-                onTap: () {},
+                infoCardData: InfoCardModel(
+                  icon: Icons.settings,
+                  title: "General Settings",
+                  message: "App preferences",
+                  color: Colors.blueGrey,
+                  onTap: () {},
+                ),
               ),
 
               const SizedBox(height: 24),
 
               InfoCard(
-                icon: Icons.logout,
-                title: "Log Out",
-                message: "",
-                color: Colors.redAccent,
-                onTap: () {
-                  // logout logic
-                },
-                showArrow: false, // نخفي السهم
+                infoCardData: InfoCardModel(
+                  icon: Icons.logout,
+                  title: "Log Out",
+                  message: "",
+                  color: Colors.redAccent,
+                  onTap: () {},
+                  showArrow: false,
+                ),
               ),
 
               const SizedBox(height: 30),

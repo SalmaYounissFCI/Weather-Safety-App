@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../core/models/weather_model.dart';
+import '../../core/services/location_service.dart';
+import '../../core/services/smart_info_service.dart';
 import '../../core/services/weather_service.dart';
 import '../../core/widgets/current_weather_card.dart';
 import '../../core/widgets/forecast_section.dart';
 import '../../core/widgets/info_card.dart';
+import '../../core/widgets/location_permission_dialog.dart';
 import '../../core/widgets/temperature_trend_card.dart';
 
 class HomeContent extends StatefulWidget {
@@ -14,101 +18,135 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
-  // الـ Future سيحتوي على قائمة من الـ Models
-  late Future<List<dynamic>> _weatherDataFuture;
-  final double lat = 27.27; // خط عرض القاهرة
-  final double lon = 31.15; // خط طول القاهرة
+  Future<List<dynamic>>? _weatherDataFuture;
 
   @override
   void initState() {
     super.initState();
-    // استدعاء البيانات لأول مرة
     _weatherDataFuture = _fetchWeatherData();
   }
 
-  // ✅ 1. إنشاء دالة منفصلة لجلب البيانات
-  Future<List<dynamic>> _fetchWeatherData() {
-    // استدعاء الدوال التي تعيد Models
-    return Future.wait([
-      WeatherService.fetchCurrentWeather(lat, lon),
-      WeatherService.fetch5DayForecast(lat, lon),
-    ]);
+  Future<List<dynamic>> _fetchWeatherData() async {
+    try {
+      final Position position = await LocationService.getCurrentPosition();
+      return Future.wait([
+        WeatherService.fetchCurrentWeather(
+          position.latitude,
+          position.longitude,
+        ),
+        WeatherService.fetch5DayForecast(position.latitude, position.longitude),
+      ]);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
   }
 
-  // ✅ دالة لإعادة تحميل البيانات عند السحب
   Future<void> _refreshWeatherData() async {
     setState(() {
       _weatherDataFuture = _fetchWeatherData();
     });
   }
 
+  void _showPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => LocationPermissionDialog(
+        onAllowPressed: () {
+          Navigator.of(context).pop();
+          _refreshWeatherData();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return SafeArea(
-      // ✅ 2. استخدام RefreshIndicator
       child: RefreshIndicator(
         onRefresh: _refreshWeatherData,
         child: SingleChildScrollView(
-          physics:
-              const AlwaysScrollableScrollPhysics(), // لجعل السحب يعمل دائمًا
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            // استخدام FutureBuilder لانتظار البيانات
             child: FutureBuilder<List<dynamic>>(
               future: _weatherDataFuture,
               builder: (context, snapshot) {
-                // 1. حالة التحميل
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     heightFactor: 10,
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: Colors.white),
                   );
                 }
-                // 2. حالة الخطأ
                 if (snapshot.hasError) {
                   return Center(
-                    child: Text("Error fetching data: ${snapshot.error}"),
+                    heightFactor: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.location_off,
+                            color: Colors.red,
+                            size: 60,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Location Access Needed",
+                            style: textTheme.headlineSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            "Please grant location permission to see weather information for your area.",
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: _showPermissionDialog,
+                            child: const Text("Grant Permission"),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 }
-                // 3. حالة النجاح
                 if (snapshot.hasData) {
-                  // تحويل البيانات إلى الـ Models الصحيحة
                   final currentData = snapshot.data![0] as CurrentWeather;
                   final forecastData = snapshot.data![1] as ForecastResponse;
 
-                  // بناء الواجهة بالبيانات الحقيقية
+                  final infoCardDataList = SmartInfoService.generateInfoCards(
+                    currentData: currentData,
+                    forecastData: forecastData,
+                  );
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 16),
-                      // تمرير الـ model object إلى الويدجت
                       CurrentWeatherCard(currentData: currentData),
                       const SizedBox(height: 24),
-                      // تمرير الـ model object إلى الويدجت
                       ForecastSection(forecastData: forecastData),
                       const SizedBox(height: 24),
-                      const InfoCard(
-                        icon: Icons.invert_colors,
-                        title: "Rain Expected",
-                        message:
-                            "Heavy rainfall in 2 hours. Carry an umbrella and avoid low-lying areas.",
-                        color: Colors.red,
+                      Text(
+                        "Safety Tips",
+                        style: textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      const InfoCard(
-                        icon: Icons.wb_sunny_outlined,
-                        title: "UV Index: Moderate",
-                        message:
-                            "Apply sunscreen if outdoors for extended periods.",
-                        color: Colors.orange,
-                      ),
-                      const SizedBox(height: 16),
-                      const InfoCard(
-                        icon: Icons.waves,
-                        title: "Stay Hydrated",
-                        message:
-                            "Moderate humidity levels. Drink water regularly throughout the day.",
-                        color: Colors.green,
+                      const SizedBox(height: 10),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: infoCardDataList.length,
+                        itemBuilder: (context, index) {
+                          final cardData = infoCardDataList[index];
+                          return InfoCard(infoCardData: cardData);
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 16),
                       ),
                       const SizedBox(height: 24),
                       const TemperatureTrendCard(),
@@ -116,8 +154,6 @@ class _HomeContentState extends State<HomeContent> {
                     ],
                   );
                 }
-
-                // الحالة الافتراضية
                 return const Center(child: Text("No data available."));
               },
             ),
