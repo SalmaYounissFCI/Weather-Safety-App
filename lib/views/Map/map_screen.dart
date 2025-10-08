@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:intl/intl.dart';
-import '../../core/constants.dart';
 import '../../core/models/weather_model.dart';
-import '../../core/services/weather_service.dart' hide openWeatherApiKey;
+import '../../core/services/caching_tile_provider.dart';
+import '../../core/services/weather_service.dart';
 
 enum MapLayerType { satellite, precipitation }
 
@@ -16,14 +16,15 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  String _currentDate = '';
+  String _latestAvailableDate = '';
   MapLayerType _selectedLayer = MapLayerType.satellite;
   Marker? _tappedMarker;
 
   @override
   void initState() {
     super.initState();
-    _currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    _latestAvailableDate = DateFormat('yyyy-MM-dd').format(yesterday);
   }
 
   void _selectLayer(MapLayerType layerType) {
@@ -51,8 +52,8 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {
         _tappedMarker = Marker(
           point: tappedPoint,
-          width: 160,
-          height: 80,
+          width: 180,
+          height: 100,
           child: _buildWeatherTooltip(weatherData),
         );
       });
@@ -75,30 +76,31 @@ class _MapScreenState extends State<MapScreen> {
     return Card(
       color: theme.cardColor.withOpacity(0.9),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: SizedBox(
-        height: 100,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                data.name,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                overflow: TextOverflow.ellipsis,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              data.name,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 4),
-              Text(
-                '${data.main.temp.toStringAsFixed(0)}°C',
-                style: theme.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 4),
-              Text(data.weather.description, style: theme.textTheme.bodySmall),
-            ],
-          ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            Text(
+              '${data.main.temp.toStringAsFixed(0)}°C',
+              style: theme.textTheme.titleMedium,
+            ),
+            Text(
+              data.weather.description,
+              style: theme.textTheme.bodySmall,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ],
         ),
       ),
     );
@@ -129,13 +131,15 @@ class _MapScreenState extends State<MapScreen> {
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.example.weatherapp',
+                tileProvider: CachingTileProvider(),
               ),
               if (_selectedLayer == MapLayerType.satellite)
                 Opacity(
                   opacity: 0.7,
                   child: TileLayer(
                     urlTemplate:
-                        'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Terra_CorrectedReflectance_TrueColor/default/$_currentDate/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+                        'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Terra_CorrectedReflectance_TrueColor/default/$_latestAvailableDate/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+                    tileProvider: CachingTileProvider(),
                   ),
                 ),
               if (_selectedLayer == MapLayerType.precipitation)
@@ -144,6 +148,7 @@ class _MapScreenState extends State<MapScreen> {
                   child: TileLayer(
                     urlTemplate:
                         'https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=$openWeatherApiKey',
+                    tileProvider: CachingTileProvider(),
                   ),
                 ),
               if (_tappedMarker != null) MarkerLayer(markers: [_tappedMarker!]),
